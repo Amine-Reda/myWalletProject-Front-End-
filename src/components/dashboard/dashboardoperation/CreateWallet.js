@@ -1,6 +1,8 @@
 import React, { Component } from "react";
-import axios from "axios";
-export default class CreateWallet extends Component {
+import classnames from "classnames";
+import { createWallet } from "../../../actions/projectActions";
+import { connect } from "react-redux";
+class CreateWallet extends Component {
   constructor(props) {
     super(props);
 
@@ -9,7 +11,13 @@ export default class CreateWallet extends Component {
       accountNumber: "",
       description: "",
       priority: "",
+      errors: "",
     };
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
   }
 
   changeHandler = (event, fieldName) => {
@@ -25,14 +33,7 @@ export default class CreateWallet extends Component {
       description: this.state.description,
       priority: this.state.priority,
     };
-    axios
-      .post("http://localhost:8080/wallet", newWallet)
-      .then((res) => {
-        alert("Success");
-      })
-      .catch((err) => {
-        alert("Error");
-      });
+    this.props.createWallet(newWallet, this.props.history);
     event.preventDefault();
   };
 
@@ -51,9 +52,12 @@ export default class CreateWallet extends Component {
                       this.changeHandler(event, "name");
                     }}
                     type="text"
-                    className="form-control form-control-lg "
+                    className={classnames("form-control form-control-lg", {
+                      "is-invalid": this.state.errors.name,
+                    })}
                     placeholder="Account Name"
                   />
+                  <p className="text-danger">{this.state.errors.name}</p>
                 </div>
                 <div className="form-group">
                   <input
@@ -61,16 +65,23 @@ export default class CreateWallet extends Component {
                       this.changeHandler(event, "accountNumber");
                     }}
                     type="text"
-                    className="form-control form-control-lg"
+                    className={classnames("form-control form-control-lg", {
+                      "is-invalid": this.state.errors.accountNumber,
+                    })}
                     placeholder="Account No"
                   />
+                  <p className="text-danger">
+                    {this.state.errors.accountNumber}
+                  </p>
                 </div>
                 <div className="form-group">
                   <textarea
                     onChange={(event) => {
                       this.changeHandler(event, "description");
                     }}
-                    className="form-control form-control-lg"
+                    className={classnames("form-control form-control-lg", {
+                      "is-invalid": this.state.errors.description,
+                    })}
                     placeholder="Description"
                   ></textarea>
                 </div>
@@ -101,3 +112,5 @@ export default class CreateWallet extends Component {
     );
   }
 }
+const mapStateToProps = (state) => ({ errors: state.errors });
+export default connect(mapStateToProps, { createWallet })(CreateWallet);
