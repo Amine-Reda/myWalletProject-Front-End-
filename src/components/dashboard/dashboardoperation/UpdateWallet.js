@@ -1,16 +1,18 @@
 import React, { Component } from "react";
 import classnames from "classnames";
-import { createWallet } from "../../../actions/projectActions";
 import { connect } from "react-redux";
-class CreateWallet extends Component {
+import { getWallet, updateWallet } from "../../../actions/projectActions";
+class UpdateWallet extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      id: "",
       name: "",
       accountNumber: "",
       description: "",
       priority: "",
+      currentBalance: "",
       errors: "",
     };
   }
@@ -18,7 +20,20 @@ class CreateWallet extends Component {
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
     }
+    if (nextProps.wallet) {
+      this.setState({
+        id: nextProps.wallet.id,
+        name: nextProps.wallet.name,
+        accountNumber: nextProps.wallet.accountNumber,
+        description: nextProps.wallet.description,
+        currentBalance: nextProps.wallet.currentBalance,
+        priority: nextProps.wallet.priority,
+      });
+    }
   }
+  componentDidMount = () => {
+    this.props.getWallet(this.props.match.params.id);
+  };
 
   changeHandler = (event, fieldName) => {
     this.setState({
@@ -27,13 +42,15 @@ class CreateWallet extends Component {
   };
 
   submitHandler = (event) => {
-    const newWallet = {
+    const updateWallet = {
+      id: this.state.id,
       name: this.state.name,
       accountNumber: this.state.accountNumber,
       description: this.state.description,
+      currentBalance: this.state.currentBalance,
       priority: this.state.priority,
     };
-    this.props.createWallet(newWallet, this.props.history);
+    this.props.updateWallet(this.state.id, updateWallet, this.props.history);
     event.preventDefault();
   };
 
@@ -43,11 +60,12 @@ class CreateWallet extends Component {
         <div className="container">
           <div className="row">
             <div className="col-md-8 m-auto">
-              <h5 className="display-4 text-center">Create Wallet</h5>
+              <h5 className="display-4 text-center">Update Wallet</h5>
               <hr />
               <form onSubmit={(event) => this.submitHandler(event)}>
                 <div className="form-group">
                   <input
+                    value={this.state.name}
                     onChange={(event) => {
                       this.changeHandler(event, "name");
                     }}
@@ -61,6 +79,7 @@ class CreateWallet extends Component {
                 </div>
                 <div className="form-group">
                   <input
+                    value={this.state.accountNumber}
                     onChange={(event) => {
                       this.changeHandler(event, "accountNumber");
                     }}
@@ -76,6 +95,7 @@ class CreateWallet extends Component {
                 </div>
                 <div className="form-group">
                   <textarea
+                    value={this.state.description}
                     onChange={(event) => {
                       this.changeHandler(event, "description");
                     }}
@@ -87,6 +107,7 @@ class CreateWallet extends Component {
                 </div>
                 <div className="form-group">
                   <select
+                    value={this.state.priority}
                     onChange={(event) => {
                       this.changeHandler(event, "priority");
                     }}
@@ -102,7 +123,7 @@ class CreateWallet extends Component {
                 <input
                   type="submit"
                   className="btn btn-primary btn-block mt-4"
-                  value="Create"
+                  value="Update"
                 />
               </form>
             </div>
@@ -112,5 +133,10 @@ class CreateWallet extends Component {
     );
   }
 }
-const mapStateToProps = (state) => ({ errors: state.errors });
-export default connect(mapStateToProps, { createWallet })(CreateWallet);
+const mapStateToProps = (state) => ({
+  errors: state.errors,
+  wallet: state.wallet.wallet,
+});
+export default connect(mapStateToProps, { getWallet, updateWallet })(
+  UpdateWallet
+);
