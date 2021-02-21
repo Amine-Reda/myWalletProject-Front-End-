@@ -1,7 +1,9 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import { createTransaction } from "../../../actions/projectActions";
 
-export default class AddTransaction extends Component {
+class AddTransaction extends Component {
   constructor(props) {
     super(props);
 
@@ -22,7 +24,11 @@ export default class AddTransaction extends Component {
       description: this.state.description,
       type: this.state.type,
     };
-
+    this.props.createTransaction(
+      newTransaction,
+      this.props.history,
+      this.props.match.params.id
+    );
     event.preventDefault();
   };
 
@@ -109,3 +115,5 @@ export default class AddTransaction extends Component {
     );
   }
 }
+
+export default connect(null, { createTransaction })(AddTransaction);

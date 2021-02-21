@@ -1,8 +1,24 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import { getTransactions } from "../../actions/projectActions";
+import TransactionItem from "./TransactionItem";
 
 class Transaction extends Component {
+  
+  componentDidMount() {
+    this.props.getTransactions(this.props.match.params.id);
+  }
   render() {
+    const walletid = this.props.match.params.id;
+    const transactions = this.props.transactions;
+    const transactionComponent = transactions.map((transaction) => (
+      <TransactionItem
+        key={transaction.id}
+        transaction={transaction}
+        walletid={walletid}
+      />
+    ));
     let id = this.props.match.params.id;
     return (
       <div className="container">
@@ -27,40 +43,17 @@ class Transaction extends Component {
               <th scope="col">Date</th>
               <th scope="col">Description</th>
               <th scope="col">Amount</th>
-              <th></th>
+              <th />
+              <th />
             </tr>
           </thead>
-          <tbody>
-            <tr className="table-danger">
-              <td>2020-04-15</td>
-              <td>PTCL Bill</td>
-              <td className="text-danger">-3000</td>
-              <td>
-                <a className="text-info" href="updatetransactionForm.html">
-                  <i className="fas fa-edit fa-2x"></i>
-                </a>
-                <span className="text-danger">
-                  <i className="fas fa-trash fa-2x"></i>
-                </span>
-              </td>
-            </tr>
-            <tr className="table-success">
-              <td>2020-04-01</td>
-              <td>Income</td>
-              <td className="text-success">+30000</td>
-              <td>
-                <a className="text-info" href="updatetransactionForm.html">
-                  <i className="fas fa-edit fa-2x"></i>
-                </a>
-                <span className="text-danger">
-                  <i className="fas fa-trash fa-2x"></i>
-                </span>
-              </td>
-            </tr>
-          </tbody>
+          <tbody>{transactionComponent}</tbody>
         </table>
       </div>
     );
   }
 }
-export default Transaction;
+const mapStateToProps = (state) => ({
+  transactions: state.transaction.transactions,
+});
+export default connect(mapStateToProps, { getTransactions })(Transaction);
