@@ -11,6 +11,7 @@ import store from "./Store";
 import UpdateWallet from "./components/dashboard/dashboardoperation/UpdateWallet";
 import Transaction from "./components/transaction/Transaction";
 import AddTransaction from "./components/transaction/transactionoperation/AddTransaction";
+import "react-app-polyfill/stable";
 function App() {
   return (
     <Provider store={store}>
