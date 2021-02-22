@@ -5,7 +5,29 @@ import { getTransactions } from "../../actions/projectActions";
 import TransactionItem from "./TransactionItem";
 
 class Transaction extends Component {
-  
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      totalTransaction: 0.0,
+    };
+  }
+
+  componentWillReceiveProps(nexProps) {
+    let totalTran = 0.0;
+    if (nexProps.transactions) {
+      for (let i = 0; i < nexProps.transactions.length; i++) {
+        if (nexProps.transactions[i].type === 1) {
+          totalTran = totalTran + nexProps.transactions[i].amount;
+        } else {
+          totalTran = totalTran - nexProps.transactions[i].amount;
+        }
+      }
+
+      this.setState({ totalTransaction: totalTran });
+    }
+  }
+
   componentDidMount() {
     this.props.getTransactions(this.props.match.params.id);
   }
@@ -32,7 +54,7 @@ class Transaction extends Component {
         <div className="card text-center">
           <div className="card-header bg-success text-white">
             <h4>UBL Account Balance</h4>
-            <h1>Rs. 27000</h1>
+            <h1>Rs. {this.state.totalTransaction}</h1>
           </div>
         </div>
         <hr />
@@ -56,4 +78,6 @@ class Transaction extends Component {
 const mapStateToProps = (state) => ({
   transactions: state.transaction.transactions,
 });
-export default connect(mapStateToProps, { getTransactions })(Transaction);
+export default connect(mapStateToProps, {
+  getTransactions,
+})(Transaction);

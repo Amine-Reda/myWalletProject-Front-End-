@@ -6,7 +6,10 @@ const initialState = { transactions: [] };
 export default function (state = initialState, action) {
   switch (action.type) {
     case GET_TRANSACTIONS:
-      return { ...state, transactions: action.payload };
+      return {
+        ...state,
+        transactions: action.payload,
+      };
 
     case DELETE_TRANSACTION:
       return {

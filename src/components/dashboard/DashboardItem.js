@@ -2,9 +2,8 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { deleteWallet } from "../../actions/projectActions";
 import { connect } from "react-redux";
-class DashboardItem extends Component {
 
-  
+class DashboardItem extends Component {
   deleteBtnClick = () => {
     if (window.confirm("Are you sur, you wan to delete this wallet")) {
       this.props.deleteWallet(this.props.wallet.id);
@@ -13,6 +12,7 @@ class DashboardItem extends Component {
 
   render() {
     const wallet = this.props.wallet;
+
     return (
       <div>
         <div className="container">

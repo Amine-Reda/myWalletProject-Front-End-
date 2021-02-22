@@ -83,5 +83,6 @@ class Dashboard extends Component {
 
 const mapStateToProps = (state) => ({
   wallets: state.wallet.wallets,
+  totalTransaction: state.wallet.totalTransaction,
 });
 export default connect(mapStateToProps, { getWallets })(Dashboard);

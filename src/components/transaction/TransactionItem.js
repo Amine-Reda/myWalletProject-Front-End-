@@ -5,8 +5,6 @@ import { deleteTransaction } from "../../actions/projectActions";
 
 class TransactionItem extends Component {
   deleteBtnClick = () => {
-
-    
     if (window.confirm("Are you sur, you wan to delete this Transaction")) {
       this.props.deleteTransaction(
         this.props.transaction.id,
@@ -14,14 +12,23 @@ class TransactionItem extends Component {
       );
     }
   };
+
   render() {
     const transaction = this.props.transaction;
     const walletid = this.props.walletid;
+    const classNames =
+      transaction.type === 1 ? "table-success" : "table-danger";
+    const signe = transaction.type === 1 ? "+" : "-";
     return (
-      <tr className="table-danger">
+      <tr className={classNames}>
         <td>2020-04-15</td>
         <td>{transaction.description}</td>
-        <td>{transaction.amount}</td>
+        {
+          <td>
+            {signe}
+            {transaction.amount}
+          </td>
+        }
         <td className="text-danger"></td>
         <td>
           <a className="text-info" href="updatetransactionForm.html">
