@@ -4,6 +4,7 @@ import DashboardItem from "./DashboardItem";
 import { connect } from "react-redux";
 import { getWallets } from "../../actions/projectActions";
 
+
 class Dashboard extends Component {
   constructor(props) {
     super(props);
@@ -34,7 +35,11 @@ class Dashboard extends Component {
         <h1 className="alert alert-info">No Wallet Found</h1>
       ) : (
         wallets.map((wallet) => (
-          <DashboardItem key={wallet.id} wallet={wallet} />
+          <DashboardItem
+            key={wallet.id}
+            wallet={wallet}
+            totalBalance={this.state.totalBalance}
+          />
         ))
       );
 
@@ -83,6 +88,5 @@ class Dashboard extends Component {
 
 const mapStateToProps = (state) => ({
   wallets: state.wallet.wallets,
-  totalTransaction: state.wallet.totalTransaction,
 });
 export default connect(mapStateToProps, { getWallets })(Dashboard);

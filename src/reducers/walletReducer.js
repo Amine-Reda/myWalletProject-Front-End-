@@ -10,6 +10,7 @@ export default function (state = initialState, action) {
       return { ...state, wallets: action.payload };
     case GET_WALLET:
       return { ...state, wallet: action.payload };
+
     case DELETE_WALLET:
       return {
         ...state,

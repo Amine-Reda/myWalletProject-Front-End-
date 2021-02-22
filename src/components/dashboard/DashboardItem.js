@@ -4,6 +4,8 @@ import { deleteWallet } from "../../actions/projectActions";
 import { connect } from "react-redux";
 
 class DashboardItem extends Component {
+  componentDidMount() {}
+
   deleteBtnClick = () => {
     if (window.confirm("Are you sur, you wan to delete this wallet")) {
       this.props.deleteWallet(this.props.wallet.id);
