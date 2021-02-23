@@ -2,7 +2,6 @@
 
 NOT FINISHED YET
 
-
 ![WalletProject](assets/walletImg.png)
 
 
